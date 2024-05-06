@@ -50,7 +50,6 @@ async function readMemo() {
   const ul = document.querySelector("#memo-ul");
   ul.innerHTML = "";
   jsonRes.forEach(displayMemo);
-  //   displayMemo(jsonRes[jsonRes.length - 1]);
 }
 
 // await를 function에서 쓸 때는 async를 붙여줘야 함
