@@ -20,6 +20,9 @@ async function deleteMemo(event) {
     method: "DELETE",
   });
 
+  console.log("========= DELETE =========");
+  console.log(res);
+
   readMemo();
 }
 
@@ -46,7 +49,6 @@ function displayMemo(memo) {
 async function readMemo() {
   const res = await fetch("/memos");
   const jsonRes = await res.json();
-  console.log(jsonRes);
   const ul = document.querySelector("#memo-ul");
   ul.innerHTML = "";
   jsonRes.forEach(displayMemo);
