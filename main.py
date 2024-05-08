@@ -13,11 +13,13 @@ class Memo(BaseModel):
     id:int
     content:str
 
-def get_memo_from_mongodb():
-    memos_in_db = list(collection.find({}, {"_id": 0})) # mongodb atlas에 저장된 객체고유id는 제외하고 반환
-    return memos_in_db
+# def get_memo_from_mongodb():
+#     memos_in_db = list(collection.find({}, {"_id": 0})) # mongodb atlas에 저장된 객체고유id는 제외하고 반환
+#     return memos_in_db
 
 app = FastAPI()
+
+memos_in_db = []
 
 @app.post('/memos')
 def create_memo(memo:Memo):
@@ -29,12 +31,13 @@ def create_memo(memo:Memo):
 
 @app.get('/memos')
 def read_memo(order : Optional[str] = None, createAt: Optional[str] = None):
-    memos_in_db = get_memo_from_mongodb()
+    global memos_in_db
+    memos_in_db = list(collection.find({}, {"_id": 0}))
     return memos_in_db
 
 @app.put("/memos/{memo_id}")
 def put_memo(req_memo:Memo):
-    memos_in_db =get_memo_from_mongodb()
+    global memos_in_db
     for memo in memos_in_db:
         if memo['id'] == req_memo.id:
             collection.update_one(
@@ -50,7 +53,7 @@ def put_memo(req_memo:Memo):
 
 @app.delete("/memos/{memo_id}")    
 def delete_memo(memo_id):
-    memos_in_db = get_memo_from_mongodb()
+    global memos_in_db
     for index, memo in enumerate(memos_in_db): 
         if str(memo.id) == str(memo_id):
             memos_in_db.pop(index)
